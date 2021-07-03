@@ -11,10 +11,16 @@ const app = express();
 //configuar cors
 app.use(cors());
 
+//Lectura y parseo del body
+app.use(express.json());
+
 //Conexion a base de datos
 bdConnection();
 
 //Rutas
+app.use('/api/users', require('./routes/user.route'));
+
+
 app.get('/', (req, res) => {
     body = {
         ok: true,
@@ -24,8 +30,9 @@ app.get('/', (req, res) => {
 });
 
 
+
 app.listen(process.env.PORT, () => {
-    console.log("Servidor corriendo en el purto " + process.env.PORT);
+    console.log("Servidor corriendo en el puerto " + process.env.PORT);
 });
 
 console.log("Hola mundo");
