@@ -1,6 +1,8 @@
 const User = require('../models/user.model');
 const { response, request } = require('express');
 const bcrypt = require('bcryptjs');
+const { generarJWT } = require('../helpers/jwt');
+
 
 const getUsuarios = async(req, res) => {
 
@@ -33,10 +35,12 @@ const createUser = async(req = request, res = response) => {
         user.password = bcrypt.hashSync(password, salt);
 
         await user.save();
+        const token = await generarJWT(user.uid);
 
         res.json({
             ok: true,
-            user
+            user,
+            token
         });
 
     } catch (error) {
@@ -95,8 +99,38 @@ const actualizarUsurario = async(req = request, res = response) => {
     }
 }
 
+const borrarUsuario = async(req = request, res = response) => {
+
+    const uid = req.params.id;
+    try {
+
+        const userDb = await User.findById(uid);
+
+        if (!userDb) {
+            return res.status(404).send({
+                ok: false,
+                msg: 'No existe un usuario por ese id'
+            });
+        } else {
+            await User.findByIdAndDelete(uid);
+            return res.status(200).send({
+                ok: false,
+                msg: 'Usuario eliminado'
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error inesperado, revisar logs"
+        });
+    }
+}
+
 module.exports = {
     getUsuarios,
     createUser,
-    actualizarUsurario
+    actualizarUsurario,
+    borrarUsuario
 }

@@ -1,6 +1,5 @@
 // Punto de entrada de la aplicacion
 require('dotenv').config();
-
 const express = require('express');
 const { bdConnection } = require('./database/config');
 const cors = require('cors');
@@ -19,6 +18,7 @@ bdConnection();
 
 //Rutas
 app.use('/api/users', require('./routes/user.route'));
+app.use('/api/login', require('./routes/auth.route'));
 
 
 app.get('/', (req, res) => {
