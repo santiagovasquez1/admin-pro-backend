@@ -22,6 +22,7 @@ app.use('/api/login', require('./routes/auth.route'));
 app.use('/api/hospitales', require('./routes/hospital.route'));
 app.use('/api/Medicos', require('./routes/doctors.route'));
 app.use('/api/todo', require('./routes/busqueda'));
+app.use('/api/upload', require('./routes/uploads.route'));
 
 
 app.get('/', (req, res) => {
