@@ -10,11 +10,10 @@ const getUsuarios = async(req = request, res = response) => {
     //Ejecutar de maneras simultanea
 
     const [users, total] = await Promise.all([
-        User.find({}, 'name email role google')
+        User.find({}, 'name email role google img')
         .skip(from)
         .limit(5),
-
-        User.count()
+        User.countDocuments()
     ]);
 
     res.json({

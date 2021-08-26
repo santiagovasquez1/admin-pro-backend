@@ -73,6 +73,20 @@ const fileUpload = async(req = request, res = response) => {
 
 }
 
+const retornaImagen = (req, res = response) => {
+    const { tipo, img } = req.params;
+    const pathImg = path.join(__dirname, '../uploads', tipo, img);
+
+    if (fs.existsSync(pathImg)) {
+        res.sendFile(pathImg);
+    } else {
+        const defaultImg = path.join(__dirname, '../uploads/no-img.png');
+        res.sendFile(defaultImg)
+    }
+
+}
+
 module.exports = {
-    fileUpload
+    fileUpload,
+    retornaImagen
 }
