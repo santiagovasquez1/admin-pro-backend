@@ -80,11 +80,23 @@ const googleSignIn = async(req = request, res = response) => {
 
 }
 
+const renewToken = async(req, res = response) => {
+    const uid = req.uid;
+    const token = await generarJWT(uid);
+
+    res.status(200).send({
+        ok: true,
+        token
+    })
+
+}
+
 const validatePassword = (password, user) => {
     return validPassword = bcrypt.compareSync(password, user.password);
 }
 
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    renewToken
 }

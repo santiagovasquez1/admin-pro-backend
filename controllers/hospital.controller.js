@@ -20,18 +20,70 @@ const getHospitales = async(req, res = response) => {
     }
 }
 
-const actualizarHospital = async(req, res = response) => {
-    return res.status(200).send({
-        ok: "True",
-        msg: "Hospitales run"
-    });
+const actualizarHospital = async(req = request, res = response) => {
+
+    try {
+        const id = req.params.id;
+        const uid = req.uid;
+        const hospital = await Hospital.findById(id);
+
+        if (!hospital) {
+            res.status(404).send({
+                ok: false,
+                msg: 'Hospital no encontrado por id'
+            });
+        }
+
+        const cambiosHospital = {
+            ...req.body,
+            usuario: uid
+        }
+
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, { new: true });
+
+        res.status(200).send({
+            ok: true,
+            msg: 'Hospital actualizado',
+            hospital: hospitalActualizado
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            ok: false,
+            msg: 'Hable con el admin del sitio'
+        });
+    }
 }
 
 const borrarHospital = async(req, res) => {
-    return res.status(200).send({
-        ok: "True",
-        msg: "Hospitales run"
-    });
+    try {
+        const id = req.params.id;
+        const hospital = await Hospital.findById(id);
+
+        if (!hospital) {
+            res.status(404).send({
+                ok: false,
+                msg: 'Hospital no encontrado por id'
+            });
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
+        res.status(200).send({
+            ok: true,
+            msg: 'Hospital eliminado'
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            ok: false,
+            msg: 'Hable con el admin del sitio'
+        });
+    }
 }
 
 const createHospital = async(req, res = response) => {

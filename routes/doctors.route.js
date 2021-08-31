@@ -1,5 +1,5 @@
 /*
-    Ruta: /api/users
+    Ruta: /api/Medicos
 */
 
 const { Router } = require('express');
@@ -19,9 +19,17 @@ router.post('/', [
     ],
     createDoctor);
 
-router.put('/:id', [], actualizarDoctor);
+router.put('/:id', [
+    validarJWT,
+    check('name', 'El nombre del medico es obligatorio').not().isEmpty(),
+    check('hospital', 'El id del hospital es obligatorio').not().isEmpty(),
+    check('hospital', 'El id del hospital debe de ser un id valido').isMongoId(),
+    validarCampos
+], actualizarDoctor);
 
 
-router.delete('/:id', [], borrarDoctor)
+router.delete('/:id', [
+    validarJWT
+], borrarDoctor)
 
 module.exports = router;

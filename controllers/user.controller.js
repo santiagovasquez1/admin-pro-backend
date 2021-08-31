@@ -64,8 +64,6 @@ const createUser = async(req = request, res = response) => {
 
 const actualizarUsurario = async(req = request, res = response) => {
 
-    //TODO: Validar token y comprobar si es el usuario correcto
-
     const uid = req.params.id;
     try {
 
