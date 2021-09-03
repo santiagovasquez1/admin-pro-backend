@@ -28,6 +28,7 @@ const login = async(req = request, res = response) => {
         } else {
             return res.status(400).send({
                 ok: false,
+                msg: 'Contraseña invalida'
             });
         }
 
@@ -46,7 +47,7 @@ const googleSignIn = async(req = request, res = response) => {
         const { name, email, picture } = await googleVerify(googleToken);
         let user;
         //Validacion de email
-        const userDb = User.findOne({ email });
+        const userDb = await User.findOne({ email });
 
         if (!userDb) {
             user = new User({
@@ -57,13 +58,13 @@ const googleSignIn = async(req = request, res = response) => {
                 google: true
             });
         } else {
-            usuario = UserDb;
-            usuario.google = true;
+            user = userDb;
+            user.google = true;
         }
 
         //Guardado en bd
-        await usuario.save();
-        const token = await generarJWT(usuario.id);
+        await user.save();
+        const token = await generarJWT(user.id);
 
         res.status(200).send({
             ok: true,
@@ -82,12 +83,17 @@ const googleSignIn = async(req = request, res = response) => {
 
 const renewToken = async(req, res = response) => {
     const uid = req.uid;
-    const token = await generarJWT(uid);
+
+    const [user, token] = await Promise.all([
+        User.findById(uid),
+        generarJWT(uid)
+    ]);
 
     res.status(200).send({
         ok: true,
-        token
-    })
+        token,
+        user
+    });
 
 }
 

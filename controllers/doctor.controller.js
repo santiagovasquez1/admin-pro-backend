@@ -75,7 +75,7 @@ const borrarDoctor = async(req, res) => {
         res.status(200).send({
             ok: true,
             msg: 'Doctor eliminado'
-        })
+        });
 
 
     } catch (error) {
