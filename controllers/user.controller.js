@@ -88,18 +88,26 @@ const actualizarUsurario = async(req = request, res = response) => {
             }
         }
 
-        campos.email = email
+        if (!userDb.google) {
+            campos.email = email
+        } else if (userDb.email !== email) {
+            return res.status(400).send({
+                ok: false,
+                msg: 'Usuarios de google no pueden cambiar su correo'
+            });
+        }
+
         const userUpdate = await User.findByIdAndUpdate(uid, campos, { new: true });
 
-        res.status(200).send({
+        return res.status(200).send({
             ok: true,
-            usurio: userUpdate
+            usuario: userUpdate
         });
 
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Error inesperado, revisar logs"
         });

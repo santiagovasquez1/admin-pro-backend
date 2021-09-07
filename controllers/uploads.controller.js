@@ -32,7 +32,7 @@ const fileUpload = async(req = request, res = response) => {
 
         const extensionesValidas = ['png', 'jpg', 'jpeg', 'gif'];
 
-        if (!extensionesValidas.includes(ext)) {
+        if (!extensionesValidas.includes(ext.toLowerCase())) {
             res.status(400).send({
                 ok: false,
                 msg: "No es una extension permitida, no es del tipo imagen"
