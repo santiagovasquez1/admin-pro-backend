@@ -38,8 +38,10 @@ const actualizarImagen = async(tipo, id, filename) => {
     }
 
     //const oldPath = `./uploads/${table}/${data.image}`;
-    const oldPath = path.join('uploads', table, data.image);
-    borrarImagen(oldPath);
+    if (data.image) {
+        const oldPath = path.join('uploads', table, data.image);
+        borrarImagen(oldPath);
+    }
 
     data.image = filename;
     await data.save();
